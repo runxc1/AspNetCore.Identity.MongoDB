@@ -90,6 +90,7 @@ namespace Dnx.Identity.MongoDB
 
         public Occurrence CreatedOn { get; private set; }
         public Occurrence DeletedOn { get; private set; }
+        public List<string> Roles { get; set; } = new List<string>();
 
         public virtual void EnableTwoFactorAuthentication()
         {

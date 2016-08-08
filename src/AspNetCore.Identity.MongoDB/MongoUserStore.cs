@@ -21,7 +21,8 @@ namespace Dnx.Identity.MongoDB
         IUserTwoFactorStore<TUser>,
         IUserEmailStore<TUser>,
         IUserLockoutStore<TUser>,
-        IUserPhoneNumberStore<TUser>
+        IUserPhoneNumberStore<TUser>,
+        IUserRoleStore<TUser>
         where TUser : MongoIdentityUser
     {
         private static bool _initialized = false;
@@ -60,7 +61,7 @@ namespace Dnx.Identity.MongoDB
                 throw new ArgumentNullException(nameof(user));
             }
 
-            await _usersCollection.InsertOneAsync(user, cancellationToken).ConfigureAwait(false);
+            await _usersCollection.InsertOneAsync(user,null, cancellationToken).ConfigureAwait(false);
 
             return IdentityResult.Success;
         }
@@ -771,6 +772,36 @@ namespace Dnx.Identity.MongoDB
             };
 
             await Task.WhenAll(tasks).ConfigureAwait(false);
+        }
+
+        public Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+        {
+            user.Roles.Add(roleName);
+            return this.UpdateAsync(user, cancellationToken);
+        }
+
+        public Task RemoveFromRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+        {
+            user.Roles.RemoveAll(x=> x== roleName);
+            return this.UpdateAsync(user, cancellationToken);
+        }
+
+        public Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)
+        {
+            IList<string> result = user.Roles.ToList();
+            return Task.FromResult(result);
+        }
+
+        public Task<bool> IsInRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
+        {
+            var result = user.Roles.Contains(roleName);
+            return Task.FromResult(result);
+        }
+
+        public Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        {
+            var query = Builders<TUser>.Filter.In("Roles", new string[] { roleName });
+            return _usersCollection.Find(query).ToListAsync(cancellationToken) as Task<IList<TUser>>;
         }
     }
 }

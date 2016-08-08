@@ -38,6 +38,13 @@ namespace Dnx.Identity.MongoDB
                 cm.MapCreator(user => new MongoIdentityUser(user.UserName, user.Email));
             });
 
+            BsonClassMap.RegisterClassMap<MongoRole>(cm =>
+            {
+                cm.AutoMap();
+                cm.SetIdMember(cm.GetMemberMap(c => c.Id));
+                cm.MapCreator(r => new MongoRole(r.Name));
+            });
+
             BsonClassMap.RegisterClassMap<MongoUserClaim>(cm =>
             {
                 cm.AutoMap();
@@ -84,7 +91,9 @@ namespace Dnx.Identity.MongoDB
                 || type == typeof(MongoUserPhoneNumber)
                 || type == typeof(ConfirmationOccurrence)
                 || type == typeof(FutureOccurrence)
+                 || type == typeof(MongoRole)
                 || type == typeof(Occurrence);
         }
     }
+
 }

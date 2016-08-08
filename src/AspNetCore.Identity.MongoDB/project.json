@@ -6,12 +6,13 @@
   "projectUrl": "https://github.com/tugberkugurlu/AspNetCore.Identity.MongoDB",
   "licenseUrl": "https://github.com/tugberkugurlu/AspNetCore.Identity.MongoDB/blob/master/LICENSE",
 
-  "dependencies": {
-    "NETStandard.Library": "1.6.0",
-    "Microsoft.AspNetCore.Identity": "1.0.0",
-    "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
-    "MongoDB.Driver": "2.3.0-beta1"
-  },
+    "dependencies": {
+        "NETStandard.Library": "1.6.0",
+        "Microsoft.AspNetCore.Identity": "1.0.0",
+        "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
+        "MongoDB.Driver": "2.3.0-beta1",
+        "Microsoft.Extensions.DependencyInjection": "1.0.0"
+    },
 
   "frameworks": {
     "netstandard1.6": {
